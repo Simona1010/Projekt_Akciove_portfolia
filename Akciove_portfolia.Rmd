@@ -1,0 +1,203 @@
+---
+title: "Projekt 3"
+author: "Simona Mikovčíková"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+## Model výberu portfólia v priestore očakávaný výnos – CVaR
+
+V tejto časti práce konštruujeme model výberu portfólia, v ktorom je
+mierou rizika **Conditional Value at Risk (CVaR)**. Ako vstupné údaje
+používame týždenné výnosy desiatich vybraných akcií z databázy Yahoo
+Finance za obdobie od 30. 9. 2020 do 30. 9. 2025.
+
+### Výpočet očakávaných výnosov akcií
+
+Na základe historických týždenných výnosov vypočítame priemerný
+(očakávaný) týždenný výnos pre každé aktívum. Tieto hodnoty slúžia ako
+vstup pre podmienku minimálneho požadovaného výnosu portfólia $Ep$ v
+optimalizačnom modeli CVaR.
+
+Na základe týchto hodnôt priemerných výnosov bol určený interval
+cieľových výnosov portfólia od $Epmin = 0.000859$ po $Epmax = 0.012407$,
+ktorý predstavuje minimálny a maximálny priemerný výnos dostupný v rámci
+sledovaných akcií.
+
+### Modelovanie a výpočet portfólií podľa CVaR
+
+V ďalšom kroku konštruujeme hranicu portfólií v priestore očakávaný
+výnos – $CVaR$. Pre 20 rôznych úrovní cieľového výnosu $Ep$ postupne
+riešime optimalizačný model, ktorý minimalizuje riziko merané pomocou
+Conditional Value at Risk.
+
+### Výsledné portólia (CVaR)
+
+Uvedená tabuľka zobrazuje 20 portfolií získaných pomocou optimalizačného
+modelu. Každý riadok tabulky predstavuje jedno portfólio, určené pre
+konkrétnu úroveň cieľového očakávaného výnosu $Ep$. Súčasťou tabuľky je:
+
+-   požadované cieľové výnosy,
+-   skutočný očakávaný výnos portfólia,
+-   hodnotu rizika CVaR pri hladine spoľahlivosti $\alpha = 5\%$,
+-   váhy jednotlivých akcií.
+
+
+
+### Interpretácia výsledných portfólií (CVaR)
+
+Z tabuľky vidno, že pri raste cieľového výnosu $Ep$ sa postupne zvyšuje
+aj riziko merané pomocou CVaR.
+
+**Portfólia s minimálym rizkom (ID 1–7)**\
+Majú rovnakú hodnotu $CVaR ≈ 0{,}0514$ a očakávaný výnos\
+$\text{ExpReturn} \approx 0{,}0052$.\
+Portfólio je rozložené medzi viacero akcií – menší podiel NVDA a AAPL,
+významnejší podiel ANET, JPM a INTC. Ide o konzervatívne riešenia s
+nízkym rizikom strát.
+
+**Portfólio s maximálnym výnosom (ID 20)**\
+Dosahujú najvyšší výnos $\text{ExpReturn} \approx 0{,}0124$ , ale aj
+najvyšší $CVaR ≈ 0{,}1244$. V tomto riešení sa portfólio silne
+koncentruje do akcie FDX.
+
+**Vybrané portfólio (ID 13)**\
+- očakávaný výnos: $\text{ExpReturn} \approx 0.008153$ - maximálny
+drawdown: $\text{CVaR} \approx 0.063054$ - vhodný kompromis medzi
+výnosom a rizikom - rozumná miera diverzifikácie medzi akcie (AAPL,
+NVDA, GOOGL, AMZN) - vyšší očakávaný výnos ako portfólio s minimálnym
+CVaR, avšak pri približne polovičnom riziku oproti portfóliu s
+maximálnym očakávaným výnosom.
+
+### Grafu efektívnej hranice portfólií (CVaR – očakávaný výnos)
+
+Graf zobrazuje efektívnu hranicu portfólií, ktoré minimalizujú CVaR pri
+rôznych úrovniach požadovaného očakávaného výnosu.
+
+Na grafe sú zvýraznené: - **Portfólio s minimálnym CVaR** –
+najkonzervatívnejšie riešenie s najnižším rizikom strát. - **Portfólio s
+maximálnym výnosom** – najvýnosnejšia, no s vyšším rizikom.
+
+Spojnicová krivka predstavuje hranicu portfólií, t. j. všetky portfóliá,
+ktoré algoritmus vypočítal pri postupnej zmene cieľového výnosu Ep.
+Krivka má prirodzene rastúci charakter: vyšší očakávaný výnos je spojený
+s vyšším rizikom CVaR. Štvorec označuje portfólio s najnižším rizikom
+CVaR. Trojuholník reprezentuje portfólio, ktoré dosiahlo najvyšší možný
+výnos, no zároveň nesie aj najvyššie riziko CVaR.
+
+## Model výberu portfólia v priestore očakávaných výnosov a miery rizika MaxDD
+
+Cieľom tejto časti projektu je nájsť portfóliá, ktoré minimalizujú
+maximálny pokles hodnoty investície (MaxDD), pri splnení požadovaného
+očakávaného výnosu portfólia. MaxDD je významným rizikovým ukazovateľom
+pre investorov, ktorí chcú obmedziť najväčší historický prepad hodnoty
+svojho kapitálu. Hľadáme teda najkonzervatívnejšie portfóliá na tzv.
+efektívnej hranici v priestore (očakávaný výnos – MaxDD).
+
+### Výsledné portfóliá (MaxDD)
+
+Uvedená tabuľka zobrazuje 20 portfolií získaných pomocou optimalizačného
+modelu. Každý riadok tabulky predstavuje jedno portfólio, určené pre
+konkrétnu úroveň cieľového očakávaného výnosu $Ep$. Súčasťou tabuľky je:
+
+-   požadovaný cieľový výnos,
+-   skutočne dosiahnutý očakávaný výnos,
+-   vypočítaná hodnota MaxDD,
+-   váhy jednotlivých akcií v portfóliu.
+
+### Interpretácia výsledných portfólií (MaxDD)
+
+Z tabuľky portfólií pre model MaxDD vidno, ako sa pri raste cieľového
+výnosu $Ep$ mení zloženie portfólia aj úroveň rizika meraného maximálnym
+drawdownom.
+
+**Portfólio s minimálnym rizikom (ID 1–5)**\
+Pre prvých päť portfólií je hodnota MaxDD rovnaká, približne $0{,}2573$,
+a zároveň očakávaný výnos portfólia je
+$\text{ExpReturn} \approx 0{,}00398$.\
+Tieto portfóliá majú identické váhy: dominantná je akcia **NVDA** (≈ 80
+%), doplnená akciami **GOOGL** (≈ 12,9 %) a **AMZN** (≈ 7,2 %). Ide o
+najkonzervatívnejšie riešenie v rámci modelu.
+
+**Portfólio s maximálnym očakávaným výnosom (ID 20)**\
+Posledné portfólio má najvyšší očakávaný výnos
+$\text{ExpReturn} \approx 0{,}01241$, avšak dosahuje najvyšší MaxDD ≈
+$0{,}9425$. Portfólio je koncentrované do akcie **FDX**. Ponúka najvyšší
+výnos, ale aj výrazne najväčší potenciálny prepad hodnoty.
+
+**Vybrané portfólio (ID 13)**\
+- očakávaný výnos: $\text{ExpReturn} \approx 0.00815$ - maximálny
+drawdown: $\text{MaxDD} \approx 0.3153$ - rozumná miera diverzifikácie
+medzi akcie (AAPL, NVDA, GOOGL, AMZN) - ponúka vyšší výnos ako
+najkonzervatívnejšie portfóliá, - zachováva prijateľnú úroveň rizika -
+nie je koncentrované do jednej akcie
+
+### Graf efektívnej hranice portfólií (MaxDD – očakávaný výnos)
+
+Nasledujúci graf zobrazuje efektívnu hranicu portfólií v priestore
+riziko merané MaxDD a očakávaný týždenný výnos.
+
+Z grafu je zreteľné, že medzi očakávaným výnosom portfólia a rizikom
+meraným maximálnym drawdownom existuje pozitívny vzťah. Čím vyšší
+očakávaný výnos portfólia investor požaduje, tým väčší maximálny
+historický pokles hodnoty (MaxDD) musí akceptovať.
+
+Na ľavej časti krivky sa nachádzajú najbezpečnejšie portfóliá s nízkou
+hodnotou MaxDD a nižším očakávaným výnosom. Tieto riešenia sú vhodné pre
+veľmi konzervatívnych investorov, ktorí kladú dôraz predovšetkým na
+stabilitu a ochranu kapitálu.
+
+S posunom po krivke doprava rastie očakávaný výnos portfólia, ale
+súčasne aj jeho riziko – maximálny drawdown sa zvyšuje. Na pravom konci
+hranice sa nachádza portfólio s najvyšším dosiahnutým výnosom, ktoré je
+však spojené aj s najväčším možným prepadom hodnoty investície.
+
+### Porovnanie môjho portfólia s efektívnymi portfóliami (model CVaR)
+
+V tejto časti porovnávam moje navrhnuté portfólio s dvoma referenčnými
+portfóliami odvodenými z efektívnej hranice modelu CVaR, a to s
+portfóliom s minimálnym rizikom a portfóliom s maximálnym výnosom.
+
+Moje portfólio má nasledovné váhy:
+
+| Akcia | Váha |
+|-------|------|
+| NVDA  | 15 % |
+| MSFT  | 13 % |
+| AAPL  | 13 % |
+| GOOGL | 10 % |
+| AMZN  | 10 % |
+| ANET  | 9 %  |
+| GE    | 8 %  |
+| JPM   | 8 %  |
+| INTC  | 7 %  |
+| FDX   | 7 %  |
+
+Tabuľka porovnáva moje vlastné portfólio s tromi referenčnými
+portfóliami z efektívnej hranice modelu CVaR:
+
+-   **Efektívne – Min CVaR (ID 1–8)**: portfólio s najnižším rizikom
+    (minimálny CVaR),
+-   **Vybrané portfólio z hranice (ID 13)**: portfólio s najlepším
+    pomerom výnosu a rizika
+-   **Efektívne – Max výnos (ID 20)**: portfólio s najvyšším očakávaným
+    výnosom.
+
+**Moje portfólio** dosahuje očakávaný výnos ExpReturn = 0.005615, čo je
+mierne viac ako pri minimálnom CVaR portfóliu 0.005217, avšak pri vyššom
+riziku CVaR 0.066632 vs. 0.051451. Inak povedané porovnaní s Min CVaR
+portfóliom prináša o niečo vyšší výnos za cenu mierne zvýšeného rizika.
+Na druhej strane, v porovnaní s portfóliom s maximálnym výnospm
+ExpReturn= 0.012407, CVaR 0.124497, je moje riešenie podstatne menej
+rizikové a zároveň diverzifikovanejšie.
+
+Z porovnania vyplýva, že **moje portfólio** predstavuje mierne
+rastovejšiu alternatívu k minimálne rizikovému portfóliu, zatiaľ čo
+**vybrané portfólio ID 13** ponúka podstatne vyšší očakávaný výnos pri
+veľmi podobnej úrovni CVaR. Ak by investor toleroval o niečo vyššie
+riziko, portfólio ID 13 by bolo z hľadiska pomeru výnos/riziko
+atraktívnejšou voľbou než moje pôvodné portfólio, pričom portfólio ID 20
+ostáva skôr extrémnym.
